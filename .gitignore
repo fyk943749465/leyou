@@ -1,0 +1,8 @@
+leyou-common/leyou-common.iml
+.idea/
+leyou-common/target/
+leyou-gateway/
+leyou-item/leyou-item-interface/target/
+leyou-item/leyou-item-service/target/
+leyou-registry/
+leyou.iml
