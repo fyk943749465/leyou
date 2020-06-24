@@ -8,6 +8,8 @@ spring:
       password: 123456
   application:
     name: search-service
+  jackson:
+    default-property-inclusion: non_null  #为了提高响应速度,降低带宽,去掉空的字段
 eureka:
   client:
     service-url:
