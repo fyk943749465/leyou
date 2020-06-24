@@ -13,7 +13,7 @@ eureka:
     service-url:
       defaultZone: http://localhost:10086/eureka
   instance:
-    lease-renewal-interval-in-seconds: 5
-    lease-expiration-duration-in-seconds: 15
+    lease-renewal-interval-in-seconds: 25
+    lease-expiration-duration-in-seconds: 35
 mybatis:
   type-aliases-package: com.leyou.item.pojo

@@ -4,10 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leyou.item.pojo.*;
-import com.leyou.search.client.BrandClient;
-import com.leyou.search.client.CategoryClient;
-import com.leyou.search.client.GoodsClient;
-import com.leyou.search.client.SpecificationClient;
+import com.leyou.search.client.*;
 import com.leyou.search.pojo.Goods;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
@@ -19,17 +16,20 @@ import java.util.*;
 @Service
 public class SearchService {
 
-    @Autowired
-    private CategoryClient categoryClient;
+//    @Autowired
+//    private CategoryClient categoryClient;
+//
+//    @Autowired
+//    private BrandClient brandClient;
+//
+//    @Autowired
+//    private GoodsClient goodsClient;
+//
+//    @Autowired
+//    private SpecificationClient specificationClient;
 
     @Autowired
-    private BrandClient brandClient;
-
-    @Autowired
-    private GoodsClient goodsClient;
-
-    @Autowired
-    private SpecificationClient specificationClient;
+    private ItemServiceClient itemServiceClient;
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -38,13 +38,13 @@ public class SearchService {
 
         // 根据分类id查询分类名称
         List<String> names =
-                this.categoryClient.queryNamesByIds(Arrays.asList(spu.getCid1(), spu.getCid2(), spu.getCid3()));
+                this.itemServiceClient.queryNamesByIds(Arrays.asList(spu.getCid1(), spu.getCid2(), spu.getCid3()));
 
         // 根据品牌id查询品牌
-        Brand brand = this.brandClient.queryBrandById(spu.getBrandId());
+        Brand brand = this.itemServiceClient.queryBrandById(spu.getBrandId());
 
         // 根据spuId查询所有的sku
-        List<Sku> skus = this.goodsClient.querySkusBySpuId(spu.getId());
+        List<Sku> skus = this.itemServiceClient.querySkusBySpuId(spu.getId());
         List<Long> prices = new ArrayList<>();
         // 收集sku的必要字段信息
         List<Map<String, Object>> skuMapList = new ArrayList<>();
@@ -61,10 +61,10 @@ public class SearchService {
         });
 
         // 根据spu中的cid3查询出所有的搜索规格参数
-        List<SpecParam> params = this.specificationClient.queryParams(null, spu.getCid3(), null, true);
+        List<SpecParam> params = this.itemServiceClient.queryParams(null, spu.getCid3(), null, true);
 
         // 根据spuId查询spuDetail
-        SpuDetail spuDetail = this.goodsClient.querySpuDetailBySupId(spu.getId());
+        SpuDetail spuDetail = this.itemServiceClient.querySpuDetailBySupId(spu.getId());
         // 把通过的规格参数值, 进行反序列化
         Map<String, Object> stringObjectMap = MAPPER.readValue(spuDetail.getGenericSpec(), new TypeReference<Map<String, Object>>() {});
         // 把特殊的规格参数值, 进行反序列化
@@ -74,7 +74,7 @@ public class SearchService {
         params.forEach(param -> {
             // 判断规格参数的类型是否是通用的规格参数
             if (param.getGeneric()) {
-                String value = stringObjectMap.get(param.getId()).toString();
+                String value = stringObjectMap.get(param.getId().toString()).toString();
                 if (param.getNumeric()) {
                     value = chooseSegment(value, param);
                 }

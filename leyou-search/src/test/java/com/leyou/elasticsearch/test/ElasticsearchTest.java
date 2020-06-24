@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.leyou.common.pojo.PageResult;
 import com.leyou.item.bo.SpuBo;
 import com.leyou.search.client.GoodsClient;
+import com.leyou.search.client.ItemServiceClient;
 import com.leyou.search.pojo.Goods;
 import com.leyou.search.repository.GoodsRepository;
 import com.leyou.search.service.SearchService;
@@ -11,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -28,7 +30,7 @@ public class ElasticsearchTest {
     private SearchService searchService;
 
     @Autowired
-    private GoodsClient goodsClient;
+    private ItemServiceClient itemServiceClient;
 
     @Test
     public void Test() {
@@ -36,8 +38,9 @@ public class ElasticsearchTest {
         Integer page = 1;
         Integer rows = 100;
         do {
-            PageResult<SpuBo> result = this.goodsClient.querySpuByPage(null, null, page, rows);
-            List<SpuBo> items = result.getItems();
+            ResponseEntity<PageResult<SpuBo>> result = this.itemServiceClient.querySpuByPage(null, null, page, rows);
+
+            List<SpuBo> items = result.getBody().getItems();
             List<Goods> goodsList = items.stream().map(spuBo -> {
                 try {
                     return this.searchService.buildGoods(spuBo);
