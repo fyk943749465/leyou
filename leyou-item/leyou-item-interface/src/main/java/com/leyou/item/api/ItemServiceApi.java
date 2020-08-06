@@ -50,4 +50,14 @@ public interface ItemServiceApi {
             @RequestParam(value = "generic", required = false)Boolean generic,
             @RequestParam(value = "searching", required = false)Boolean searching);
     /***********************Specification*******************************************/
+
+    /***********************VirusInfect*********************************************/
+    @GetMapping("virus/infect/page")
+    public ResponseEntity<PageResult<VirusInfect>> queryVirusPage(
+            @RequestParam(value = "key", required = false) String key,
+            @RequestParam(value = "saleable", required = false) Boolean saleable,
+            @RequestParam(value = "page", defaultValue = "1")Integer page,
+            @RequestParam(value = "rows", defaultValue = "10000") Integer rows
+    );
+    /***********************VirusInfect*********************************************/
 }

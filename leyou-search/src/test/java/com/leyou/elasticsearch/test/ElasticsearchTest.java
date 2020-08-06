@@ -3,6 +3,7 @@ package com.leyou.elasticsearch.test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.leyou.common.pojo.PageResult;
 import com.leyou.item.bo.SpuBo;
+import com.leyou.item.pojo.VirusInfect;
 import com.leyou.search.client.GoodsClient;
 import com.leyou.search.client.ItemServiceClient;
 import com.leyou.search.pojo.Goods;
@@ -54,5 +55,19 @@ public class ElasticsearchTest {
             rows = items.size();
             page ++;
         } while (rows == 100);
+    }
+
+
+    @Test
+    public void virusInfectTest() {
+        Integer page = 1;
+        Integer rows = 5000;
+        do {
+            ResponseEntity<PageResult<VirusInfect>> result = this.itemServiceClient.queryVirusPage(null, null, page, rows);
+            List<VirusInfect> items = result.getBody().getItems();
+            System.out.println("第" + page + "页,数据" + rows + "条");
+            rows = items.size();
+            page ++;
+        } while (rows == 5000);
     }
 }

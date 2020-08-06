@@ -3,7 +3,7 @@ server:
 spring:
   elasticsearch:
     rest:
-      uris: http://192.168.1.15:9020
+      uris: http://192.168.1.7:9200
       username: elastic
       password: 123456
   application:
@@ -18,3 +18,9 @@ eureka:
   instance:
     lease-expiration-duration-in-seconds: 20
     lease-renewal-interval-in-seconds: 15
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 60000
+        readTimeout: 60000
